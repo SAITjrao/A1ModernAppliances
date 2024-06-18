@@ -1,14 +1,16 @@
 ﻿using ModernAppliances.Entities;
 using ModernAppliances.Entities.Abstract;
 using ModernAppliances.Helpers;
+using ModernAppliances.ProblemDomain;
+using Appliance = ModernAppliances.Entities.Abstract.Appliance;
 
 namespace ModernAppliances
 {
     /// <summary>
     /// Manager class for Modern Appliances
     /// </summary>
-    /// <remarks>Author: </remarks>
-    /// <remarks>Date: </remarks>
+    /// <remarks>Author: Jazib Rao</remarks>
+    /// <remarks>Date: 06/18/2024</remarks>
     internal class MyModernAppliances : ModernAppliances
     {
         /// <summary>
@@ -17,33 +19,57 @@ namespace ModernAppliances
         public override void Checkout()
         {
             // Write "Enter the item number of an appliance: "
-
+            Console.WriteLine("Enter the item number of an appliance: ");
             // Create long variable to hold item number
-
+            long itemNum;
             // Get user input as string and assign to variable.
             // Convert user input from string to long and store as item number variable.
+            string input = Console.ReadLine();
+            itemNum = Convert.ToInt64(input);
 
             // Create 'foundAppliance' variable to hold appliance with item number
             // Assign null to foundAppliance (foundAppliance may need to be set as nullable)
+            Appliance? foundAppliance;
+            foundAppliance = null;
 
             // Loop through Appliances
-                // Test appliance item number equals entered item number
-                    // Assign appliance in list to foundAppliance variable
-
-                    // Break out of loop (since we found what need to)
+            // Test appliance item number equals entered item number
+            // Assign appliance in list to foundAppliance variable
+            // Break out of loop (since we found what need to)
+            foreach (Entities.Abstract.Appliance appliance in Appliances)
+            {
+                if (appliance.ItemNumber == itemNum)
+                {
+                    foundAppliance = appliance;
+                    break;
+                }
+            }
 
             // Test appliance was not found (foundAppliance is null)
-                // Write "No appliances found with that item number."
+            // Write "No appliances found with that item number."
+            if(foundAppliance == null)
+            {
+                Console.WriteLine("No appliances found with that item number.");
+            }
 
             // Otherwise (appliance was found)
-                // Test found appliance is available
-                    // Checkout found appliance
-
-                    // Write "Appliance has been checked out."
-                // Otherwise (appliance isn't available)
-                    // Write "The appliance is not available to be checked out."
+            // Test found appliance is available
+            // Checkout found appliance
+            // Write "Appliance has been checked out."
+            // Otherwise (appliance isn't available)
+            // Write "The appliance is not available to be checked out."
+            if (foundAppliance.IsAvailable)
+            {
+                foundAppliance.Checkout();
+                Console.WriteLine("Appliance has been checked out.");
+                Console.WriteLine(foundAppliance.ToString());
+            }
+            else
+            {
+                Console.WriteLine("The appliance is not available to be checked out.");
+            }
+            
         }
-
         /// <summary>
         /// Option 2: Finds appliances
         /// </summary>
@@ -300,5 +326,65 @@ namespace ModernAppliances
             // Display found appliances (up to max. number inputted)
             // DisplayAppliancesFromList(found, num);
         }
+
+        //reads file, creates appliance objects based on their itemNum, adds appliances to list and returns it
+        public static List<ProblemDomain.Appliance> ParseFile()
+        {
+            string filePath = ModernAppliances.APPLIANCES_TEXT_FILE;
+            List<ProblemDomain.Appliance> appliances = new List<ProblemDomain.Appliance>();
+            string[] lines = File.ReadAllLines(filePath);
+            foreach (string line in lines)
+            {
+                string[] parts = line.Split(";");
+
+                long itemNum = Convert.ToInt64(parts[0]);
+                string brand = parts[1];
+                int quantity = Convert.ToInt32(parts[2]);
+                int wattage = Convert.ToInt32(parts[3]);
+                string color = parts[4];
+                double price = Convert.ToDouble(parts[5]);
+
+
+                int firstDigit = Convert.ToInt32(parts[0].Substring(0,1));
+                if (firstDigit == 1)
+                {
+                    int doors = Convert.ToInt32(parts[6]);
+                    int height = Convert.ToInt32(parts[7]);
+                    int width = Convert.ToInt32(parts[8]);
+                    ProblemDomain.Appliance appliance = new ProblemDomain.Refrigerator(itemNum, brand, quantity, color, price, wattage, doors, height, width);
+                    appliances.Add(appliance);
+                }
+                else if (firstDigit == 2)
+                {
+                    string grade = (parts[6]);
+                    int batteryVoltage = Convert.ToInt32(parts[7]);
+                    ProblemDomain.Appliance appliance = new ProblemDomain.Vacuum(itemNum, brand, quantity, color, price, wattage, batteryVoltage, grade);
+                    appliances.Add(appliance);
+                }
+                else if (firstDigit == 3)
+                {
+                    double capacity = Convert.ToDouble(parts[6]);
+                    string roomType = (parts[7]);
+                    ProblemDomain.Appliance appliance = new ProblemDomain.Microwave(itemNum, brand, quantity, color, price, wattage, capacity, roomType);
+                    appliances.Add(appliance);
+                }
+                else if (firstDigit == 4 || firstDigit == 5)
+                {
+                    string feature = (parts[6]);
+                    string soundRating = (parts[7]);
+                    ProblemDomain.Appliance appliance = new ProblemDomain.Dishwasher(itemNum, brand, quantity, color, price, wattage, feature, soundRating);
+                    appliances.Add(appliance);
+                }
+
+            }
+            return appliances;
+        }
+
+        public static void PurchaseAppliance()
+        {
+
+        }
+
+
     }
 }
