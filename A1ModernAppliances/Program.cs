@@ -18,14 +18,11 @@ namespace ModernAppliances
             ModernAppliances modernAppliances = new MyModernAppliances();
             ModernAppliances.Options option = ModernAppliances.Options.None;
 
-            List<ProblemDomain.Appliance> appliances = MyModernAppliances.ParseFile();
+            /*List<ProblemDomain.Appliance> appliances = MyModernAppliances.ParseFile();
             foreach (ProblemDomain.Appliance appliance in appliances)
             {
                 Console.WriteLine(appliance.ItemNumber);
-            }
-
-
-
+            }*/
 
             while (option != ModernAppliances.Options.SaveExit)
             {

@@ -48,27 +48,31 @@ namespace ModernAppliances
 
             // Test appliance was not found (foundAppliance is null)
             // Write "No appliances found with that item number."
-            if(foundAppliance == null)
-            {
-                Console.WriteLine("No appliances found with that item number.");
-            }
-
             // Otherwise (appliance was found)
             // Test found appliance is available
             // Checkout found appliance
             // Write "Appliance has been checked out."
             // Otherwise (appliance isn't available)
             // Write "The appliance is not available to be checked out."
-            if (foundAppliance.IsAvailable)
+            if (foundAppliance == null)
             {
-                foundAppliance.Checkout();
-                Console.WriteLine("Appliance has been checked out.");
-                Console.WriteLine(foundAppliance.ToString());
+                Console.WriteLine("No appliances found with that item number.");
             }
             else
             {
-                Console.WriteLine("The appliance is not available to be checked out.");
+                if(foundAppliance.IsAvailable) {
+                    foundAppliance.Checkout();
+                    Console.WriteLine("Appliance has been checked out.");
+                    Console.WriteLine(foundAppliance.ToString());
+                }
+                else
+                {
+                    Console.WriteLine("The appliance is not available to be checked out.");
+                }
+                
             }
+
+            
             
         }
         /// <summary>
@@ -282,9 +286,7 @@ namespace ModernAppliances
                         }
                     }
                 }
-
             }
-
             // Display found appliances
             // DisplayAppliancesFromList(found, 0);
             DisplayAppliancesFromList(found, 0);
@@ -355,9 +357,7 @@ namespace ModernAppliances
                         found.Add(microwave);
                     }
                 }
-
             }
-
             // Display found appliances
             // DisplayAppliancesFromList(found, 0);
             DisplayAppliancesFromList(found, 0);
@@ -443,9 +443,6 @@ namespace ModernAppliances
                 }
 
             }
-
-
-
             // Display found appliances (up to max. number inputted)
             // DisplayAppliancesFromList(found, 0);
             DisplayAppliancesFromList(found, 0);
@@ -463,40 +460,79 @@ namespace ModernAppliances
             // Write "2 – Vacuums"
             // Write "3 – Microwaves"
             // Write "4 – Dishwashers"
+            Console.WriteLine("Appliance Types\n0 - Any\n1 - Refrigerators\n2 - Vacuums\n3 - Microwaves\n4 - Dishwashers");
+
 
             // Write "Enter type of appliance:"
-
+            Console.WriteLine("Enter type of appliance:");
             // Get user input as string and assign to appliance type variable
-
+            string applianceType = Console.ReadLine();
             // Write "Enter number of appliances: "
-
+            Console.WriteLine("Enter number of appliances: ");
             // Get user input as string and assign to variable
-
             // Convert user input from string to int
+            int numAppliances = Convert.ToInt32(Console.ReadLine());
 
             // Create variable to hold list of found appliances
+            var found = new List<Entities.Abstract.Appliance> { };
 
             // Loop through appliances
-                // Test inputted appliance type is "0"
-                    // Add current appliance in list to found list
-                // Test inputted appliance type is "1"
-                    // Test current appliance type is Refrigerator
-                        // Add current appliance in list to found list
-                // Test inputted appliance type is "2"
-                    // Test current appliance type is Vacuum
-                        // Add current appliance in list to found list
-                // Test inputted appliance type is "3"
-                    // Test current appliance type is Microwave
-                        // Add current appliance in list to found list
-                // Test inputted appliance type is "4"
-                    // Test current appliance type is Dishwasher
-                        // Add current appliance in list to found list
+            // Test inputted appliance type is "0"
+            // Add current appliance in list to found list
+            // Test inputted appliance type is "1"
+            // Test current appliance type is Refrigerator
+            // Add current appliance in list to found list
+            // Test inputted appliance type is "2"
+            // Test current appliance type is Vacuum
+            // Add current appliance in list to found list
+            // Test inputted appliance type is "3"
+            // Test current appliance type is Microwave
+            // Add current appliance in list to found list
+            // Test inputted appliance type is "4"
+            // Test current appliance type is Dishwasher
+            // Add current appliance in list to found list
+
+            foreach (Entities.Abstract.Appliance appliance in Appliances)
+            {
+                switch(applianceType)
+                {
+                    case "0":
+                        found.Add(appliance);
+                        break;
+                    case "1":
+                        if(appliance is Entities.Refrigerator)
+                        {
+                            found.Add(appliance);
+                        }
+                        break;
+                    case "2":
+                        if(appliance is Entities.Vacuum)
+                        {
+                            found.Add(appliance);
+                        }
+                        break;
+                    case "3":
+                        if(appliance is Entities.Microwave)
+                        {
+                            found.Add(appliance);
+                        }
+                        break;
+                    case "4":
+                        if(appliance is Entities.Dishwasher)
+                        {
+                            found.Add(appliance);
+                        }
+                        break;
+                }
+            }
 
             // Randomize list of found appliances
             // found.Sort(new RandomComparer());
+            found.Sort(new RandomComparer());
 
             // Display found appliances (up to max. number inputted)
             // DisplayAppliancesFromList(found, num);
+            DisplayAppliancesFromList(found, numAppliances);
         }
 
         //reads file, creates appliance objects based on their itemNum, adds appliances to list and returns it
@@ -550,11 +586,6 @@ namespace ModernAppliances
 
             }
             return appliances;
-        }
-
-        public static void PurchaseAppliance()
-        {
-
         }
 
 
